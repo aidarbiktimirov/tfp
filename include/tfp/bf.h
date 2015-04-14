@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tfp/base.h>
 #include <tfp/string.h>
 
 namespace tfp
@@ -247,12 +248,37 @@ namespace tfp
 		}
 
 		// function that parses brainfuck program and returns tree of its operations
-		template<typename Str>
-		using parse = typename helper::parse<Str>::value;
+		struct parse
+		{
+			using value = parse;
+
+			template<typename Str>
+			struct bind
+			{
+				using value = typename helper::parse<Str>::value;
+			};
+		};
 
 		// function that accepts brainfuck operation tree and executes it on given input string
-		template<typename Program, typename Input = string::str<>>
-		using run = typename helper::run<Program, helper::tape<helper::infinite_list<>, 0, helper::infinite_list<>>, Input, string::str<>>::value;
+		struct run
+		{
+			using value = run;
+
+			template<typename Program>
+			struct bind
+			{
+				struct value
+				{
+					template<typename Input>
+					struct bind
+					{
+						using value = typename helper::run<Program, helper::tape<helper::infinite_list<>, 0, helper::infinite_list<>>, Input, string::str<>>::value;
+					};
+				};
+			};
+		};
+
+		using parse_and_run = apply<composition, run, parse>;
 
 	}
 
