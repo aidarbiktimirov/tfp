@@ -9,4 +9,6 @@
 #include <tfp/list.h>
 #include <tfp/maybe.h>
 
+#include <tfp/bf.h>
+
 #include <tfp/printer.h>
