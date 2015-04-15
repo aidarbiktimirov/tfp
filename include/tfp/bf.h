@@ -187,7 +187,6 @@ namespace tfp
 			template<typename Tape, char... Input, char... Output>
 			struct run<operation_list<>, Tape, string::str<Input...>, string::str<Output...>>
 			{
-				using value = string::str<Output...>;
 				using tape = Tape;
 				using input = string::str<Input...>;
 				using output = string::str<Output...>;
@@ -197,7 +196,6 @@ namespace tfp
 			struct run<operation_list<Operation<N>, Operations...>, Tape, string::str<Input...>, string::str<Output...>>
 			{
 				using after_iteration = run<operation_list<Operations...>, typename modify_tape<Tape, Operation<N>>::value, string::str<Input...>, string::str<Output...>>;
-				using value = typename after_iteration::value;
 				using tape = typename after_iteration::tape;
 				using input = typename after_iteration::input;
 				using output = typename after_iteration::output;
@@ -207,7 +205,6 @@ namespace tfp
 			struct run<operation_list<write, Operations...>, tape<LeftPart, Current, RightPart>, string::str<Input...>, string::str<Output...>>
 			{
 				using after_iteration = run<operation_list<Operations...>, tape<LeftPart, Current, RightPart>, string::str<Input...>, string::str<Output..., static_cast<char>(Current)>>;
-				using value = typename after_iteration::value;
 				using tape = typename after_iteration::tape;
 				using input = typename after_iteration::input;
 				using output = typename after_iteration::output;
@@ -217,7 +214,6 @@ namespace tfp
 			struct run<operation_list<read, Operations...>, tape<LeftPart, Current, RightPart>, string::str<FirstChar, Input...>, string::str<Output...>>
 			{
 				using after_iteration = run<operation_list<Operations...>, tape<LeftPart, static_cast<int>(FirstChar), RightPart>, string::str<Input...>, string::str<Output...>>;
-				using value = typename after_iteration::value;
 				using tape = typename after_iteration::tape;
 				using input = typename after_iteration::input;
 				using output = typename after_iteration::output;
@@ -227,7 +223,6 @@ namespace tfp
 			struct run<operation_list<cycle<Cycle>, Operations...>, tape<LeftPart, 0, RightPart>, string::str<Input...>, string::str<Output...>>
 			{
 				using after_iteration = run<operation_list<Operations...>, tape<LeftPart, 0, RightPart>, string::str<Input...>, string::str<Output...>>;
-				using value = typename after_iteration::value;
 				using tape = typename after_iteration::tape;
 				using input = typename after_iteration::input;
 				using output = typename after_iteration::output;
@@ -239,7 +234,6 @@ namespace tfp
 				using after_iteration = run<Cycle, Tape, string::str<Input...>, string::str<Output...>>;
 				using after_all_iterations = run<operation_list<cycle<Cycle>, Operations...>, typename after_iteration::tape, typename after_iteration::input, typename after_iteration::output>;
 
-				using value = typename after_all_iterations::value;
 				using tape = typename after_all_iterations::tape;
 				using input = typename after_all_iterations::input;
 				using output = typename after_all_iterations::output;
@@ -272,7 +266,7 @@ namespace tfp
 					template<typename Input>
 					struct bind
 					{
-						using value = typename helper::run<Program, helper::tape<helper::infinite_list<>, 0, helper::infinite_list<>>, Input, string::str<>>::value;
+						using value = typename helper::run<Program, helper::tape<helper::infinite_list<>, 0, helper::infinite_list<>>, Input, string::str<>>::output;
 					};
 				};
 			};

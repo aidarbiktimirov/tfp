@@ -8,7 +8,7 @@ CXX              = g++
 main: $(TFP_INC)/tfp.h ./src/main.cpp
 	$(CXX) $(CFLAGS) ./src/main.cpp -otest
 
-bf: $(TFP_INC)/tfp.h ./src/bf.cpp
+bf: $(TFP_INC)/tfp.h $(TFP_INC)/tfp/bf.h ./src/bf.cpp
 	$(CXX) $(CFLAGS) ./src/bf.cpp -obf
 
 clean:
